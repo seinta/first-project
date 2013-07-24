@@ -38,6 +38,7 @@ namespace WindowsFormsApplication15
             public string timeout;
             public int inside;  // 1==in     0==out
             public int indexoflistbox;
+            public int numberofbreaks;
             //public double breaktime;
             //public double fullbreaktime;
             public TimeSpan starttime;
@@ -51,6 +52,7 @@ namespace WindowsFormsApplication15
                 name = null;
                 surname = null;
                 inside = 0;
+                numberofbreaks = 0;
                 //starttime = DateTime.
               //  breaktime= 0;
                 //fullbreaktime = 0;
@@ -182,7 +184,13 @@ namespace WindowsFormsApplication15
 
                 }
 
-                 listBox1.Items.Add (k.name + "    " + k.surname ); 
+                 listBox1.Items.Add (k.name + "    " + k.surname );
+                 ListViewItem lvi= new ListViewItem(k.name);
+                 lvi.ForeColor = Color.Red;
+                 lvi.SubItems.Add(k.surname);
+                 listView1.Items.Add(lvi);
+                // listView1.Items.Ad
+                 //listView1.Items.Add(k.surname); 
                  k.indexoflistbox = listBox1.Items.Count-1;
                  
                 list.Add(k);
@@ -240,6 +248,7 @@ namespace WindowsFormsApplication15
                         list[count].timeout = DateTime.Now.ToLongTimeString();
                         list[count].breaktime = timeSpan;
                         list[count].lasttime = timeSpan;
+                        list[count].numberofbreaks++;
                         //list[count].inside++;
                        //list[count].timeout = DateTime.Now.ToLongTimeString();
                          // listBox1.Items[list[count].indexoflistbox]=  list[count].name + "     " + list[count].surname +"      "+ list[count].timein+"     "+list[count].timeout+"\r";
@@ -261,7 +270,24 @@ namespace WindowsFormsApplication15
                     }
 
                     list[count].fullworktime = timeSpan - list[count].starttime - list[count].fullbreaktime;
-                    listBox1.Items[list[count].indexoflistbox] = list[count].name + "   " + list[count].surname + "        " + list[count].timein + "                      " + list[count].fullworktime.Hours +":"+list[count].fullworktime.Minutes+":"+list[count].fullworktime.Seconds+"             " + list[count].fullbreaktime.Hours+":" +list[count].fullbreaktime.Minutes+":"+list[count].fullbreaktime.Seconds+ "                  " + list[count].timeout + "\r";
+                    ListViewItem lvi = new ListViewItem(list[count].name);
+                    lvi.SubItems.Add(list[count].surname);
+                    lvi.SubItems.Add(list[count].timein);
+                    lvi.SubItems.Add(list[count].fullworktime.Hours + ":" + list[count].fullworktime.Minutes + ":" + list[count].fullworktime.Seconds);
+                    lvi.SubItems.Add(list[count].fullbreaktime.Hours + ":" + list[count].fullbreaktime.Minutes + ":" + list[count].fullbreaktime.Seconds);
+                    lvi.SubItems.Add(list[count].timeout);
+                    lvi.SubItems.Add(list[count].numberofbreaks.ToString());
+                   // lvi.SubItems.Add(list[count].numberofbreaks);
+                    if (list[count].inside % 2 == 0)
+                    {
+                        lvi.ForeColor = Color.Green;
+                    }
+                    else
+                        lvi.ForeColor = Color.Red;
+                    
+                    listView1.Items[list[count].indexoflistbox]=lvi;
+                  //  listView1.Items[list[count].indexoflistbox].SubItems[1].
+                        listBox1.Items[list[count].indexoflistbox] = list[count].name + "   " + list[count].surname + "        " + list[count].timein + "                      " + list[count].fullworktime.Hours +":"+list[count].fullworktime.Minutes+":"+list[count].fullworktime.Seconds+"             " + list[count].fullbreaktime.Hours+":" +list[count].fullbreaktime.Minutes+":"+list[count].fullbreaktime.Seconds+ "                  " + list[count].timeout + "\r";
                     list[count].inside++;
                     break;
                     }
@@ -291,6 +317,10 @@ namespace WindowsFormsApplication15
         {
 
         }
+
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
-
